@@ -7,9 +7,9 @@ const TRAIL = "M70 326 C 96 246 140 204 262 188 C 390 172 502 132 600 92";
 const FLIGHT = TRAIL + " C 636 82 664 52 720 -6";
 
 const STEPS = [
-  { t: 0.2, color: "var(--color-coral)", n: "1", label: "Discovery & blueprint", kt: "0;0.06;0.09;0.9;1" },
-  { t: 0.44, color: "var(--color-cyan)", n: "2", label: "Design & build", kt: "0;0.16;0.19;0.9;1" },
-  { t: 0.62, color: "var(--color-lime)", n: "3", label: "QA & deploy", kt: "0;0.25;0.28;0.9;1" },
+  { x: 112, color: "var(--color-coral)", n: "1", label: "Discovery & blueprint", kt: "0;0.06;0.09;0.9;1" },
+  { x: 272, color: "var(--color-cyan)", n: "2", label: "Design & build", kt: "0;0.16;0.19;0.9;1" },
+  { x: 432, color: "var(--color-lime)", n: "3", label: "QA & deploy", kt: "0;0.25;0.28;0.9;1" },
 ];
 
 /**
@@ -28,9 +28,16 @@ export function LaunchSequence() {
     if (!p) return;
     try {
       const len = p.getTotalLength();
+      const N = 400;
       setPts(STEPS.map((s) => {
-        const pt = p.getPointAtLength(len * s.t);
-        return { x: pt.x, y: pt.y };
+        let best = { x: 0, y: 0 };
+        let bd = Infinity;
+        for (let l = 0; l <= len; l += len / N) {
+          const pt = p.getPointAtLength(l);
+          const d = Math.abs(pt.x - s.x);
+          if (d < bd) { bd = d; best = { x: pt.x, y: pt.y }; }
+        }
+        return best;
       }));
     } catch {
       /* no-op */
