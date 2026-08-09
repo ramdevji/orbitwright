@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { Magnetic } from "@/components/magnetic";
 import { OrbitSystem } from "@/components/orbit-system";
+import { LaunchSequence } from "@/components/launch-sequence";
 import type { ReactNode } from "react";
 import {
   pillars,
@@ -135,7 +136,7 @@ export function Hero() {
                 ["Fixed", "price, no surprises", "var(--color-cyan)"],
                 ["AI-native", "team ex-Meta & CRED", "var(--color-coral)"],
               ].map(([big, small, c]) => (
-                <div key={big} className="glass rounded-[--radius-md] px-4 py-3">
+                <div key={big} className="glass rounded-[var(--radius-md)] px-4 py-3">
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full" style={{ background: c, boxShadow: `0 0 10px ${c}` }} />
                     <span className="font-[family-name:var(--font-heading)] text-xl font-bold text-white">
@@ -210,7 +211,7 @@ export function Problem() {
               A designer who doesn&apos;t talk to the developer. A dev who can&apos;t deploy. A
               &ldquo;DevOps guy&rdquo; who ghosts you at launch. And nobody who owns the outcome.
             </p>
-            <div className="glass rounded-[--radius-lg] p-6">
+            <div className="glass rounded-[var(--radius-lg)] p-6">
               <p className="text-lg font-medium text-white">
                 OrbitWright is the opposite: <span className="text-gradient">one team</span> that
                 owns your product from first pixel to production — and stays on after launch.
@@ -286,17 +287,16 @@ export function Process() {
           subtitle="A predictable four-stage mission. You always know what's happening, what it costs, and when you launch."
         />
 
-        <div className="relative mt-16">
+        <div className="relative mt-10">
           {/* live shipping pipeline */}
           <div className="pipeline">
-            <div className="pipeline-rail" aria-hidden="true">
-              <span className="pipeline-flow" />
-              <span className="pipeline-packet" style={{ ["--p-accent" as string]: "var(--color-lime)", animationDelay: "0s" }} />
-              <span className="pipeline-packet" style={{ ["--p-accent" as string]: "var(--color-cyan)", animationDelay: "-1.4s" }} />
-              <span className="pipeline-packet" style={{ ["--p-accent" as string]: "var(--color-coral)", animationDelay: "-2.8s" }} />
-            </div>
+            <Reveal>
+              <div className="mission-map">
+                <LaunchSequence />
+              </div>
+            </Reveal>
 
-            <div className="grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-4">
+            <div className="pipeline-grid">
               {process.map((step, i) => {
                 const acc = ["var(--color-coral)", "var(--color-cyan)", "var(--color-lime)", "var(--color-violet)"][i % 4];
                 return (
@@ -358,7 +358,7 @@ export function AIShowcase() {
   return (
     <section className="section">
       <div className="container-x">
-        <div className="relative overflow-hidden rounded-[--radius-2xl] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink-card)] p-8 md:p-14">
+        <div className="relative overflow-hidden rounded-[var(--radius-2xl)] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink-card)] p-8 md:p-14">
           <div
             className="glow animate-glow"
             style={{ width: 360, height: 360, background: "var(--color-coral)", top: "-20%", right: "-6%", opacity: 0.3 }}
@@ -392,7 +392,7 @@ export function AIShowcase() {
 
             <Reveal delay={140}>
               {/* stylized agent panel */}
-              <div className="rounded-[--radius-lg] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink)] p-5 font-mono text-sm shadow-2xl">
+              <div className="rounded-[var(--radius-lg)] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink)] p-5 font-mono text-sm shadow-2xl">
                 <div className="mb-4 flex items-center gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-coral" />
                   <span className="h-3 w-3 rounded-full bg-lime" />
@@ -672,11 +672,11 @@ export function CTA() {
         </div>
 
         <Reveal delay={120}>
-          <div className="mx-auto mt-12 max-w-2xl rounded-[--radius-xl] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink-card)] p-8 text-center sm:p-12">
+          <div className="mx-auto mt-12 max-w-2xl rounded-[var(--radius-xl)] border border-[color:var(--color-ink-line)] bg-[color:var(--color-ink-card)] p-8 text-center sm:p-12">
             <p className="text-sm text-fog">Just send us an email — no forms, no funnels.</p>
             <a
               href={`mailto:${site.email}?subject=New%20project%20for%20OrbitWright`}
-              className="mt-4 inline-block font-[family-name:var(--font-heading)] text-3xl font-bold text-white underline decoration-[color:var(--color-cyan)] decoration-2 underline-offset-8 transition-colors hover:text-cyan sm:text-4xl"
+              className="mt-4 inline-block font-[family-name:var(--font-heading)] max-w-full break-words text-[clamp(1.05rem,6vw,2.25rem)] font-bold text-white underline decoration-[color:var(--color-cyan)] decoration-2 underline-offset-8 transition-colors hover:text-cyan"
             >
               {site.email}
             </a>

@@ -39,9 +39,8 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-[color:var(--color-ink-line)]">
-        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-[color:var(--color-fog-dim)] sm:flex-row">
+        <div className="container-x flex flex-col items-center justify-center gap-3 py-6 text-xs text-[color:var(--color-fog-dim)] sm:flex-row">
           <p>© {new Date().getFullYear()} OrbitWright. All systems go.</p>
-          <p>Designed &amp; built in-house — this site is our proof of work.</p>
         </div>
       </div>
     </footer>

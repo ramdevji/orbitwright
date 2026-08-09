@@ -799,7 +799,8 @@ a { color: inherit; }
    ------------------------------------------------------------ */
 .mono { font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace); }
 
-.pipeline { position: relative; }
+.pipeline { position: relative; container-type: inline-size; }
+.pipeline-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
 .pipeline-rail {
   position: absolute;
   top: 1.75rem;
@@ -810,7 +811,11 @@ a { color: inherit; }
   z-index: 0;
   background: color-mix(in srgb, var(--color-cyan) 20%, transparent);
 }
-@media (min-width: 768px) { .pipeline-rail { display: block; } }
+@container (min-width: 30rem) { .pipeline-grid { grid-template-columns: repeat(2, 1fr); } }
+@container (min-width: 52rem) {
+  .pipeline-grid { grid-template-columns: repeat(4, 1fr); }
+  .pipeline-rail { display: block; }
+}
 .pipeline-flow {
   position: absolute;
   inset: 0;
@@ -898,6 +903,64 @@ a { color: inherit; }
   white-space: nowrap;
 }
 @keyframes logscroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+
+/* ------------------------------------------------------------
+   Delivery conveyor (Process) — pack → ship → deliver
+   ------------------------------------------------------------ */
+.delivery { position: relative; height: 160px; max-width: 44rem; margin: 0 auto 2.75rem; overflow: hidden; }
+.delivery-belt { position: absolute; left: 0; right: 14%; bottom: 32px; height: 12px; border-radius: 8px; background: var(--color-ink-line); overflow: hidden; }
+.delivery-belt-move { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 12px, color-mix(in srgb, var(--color-cyan) 45%, transparent) 12px 16px); background-size: 28px 100%; animation: belt-move 0.5s linear infinite; }
+@keyframes belt-move { to { background-position: 28px 0; } }
+.roller { position: absolute; bottom: 28px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--color-fog-dim); }
+.roller::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; border-top: 2px solid var(--color-cyan); animation: orbit-spin 0.5s linear infinite; }
+.dropzone { position: absolute; right: 4%; bottom: 28px; width: 54px; height: 54px; border-radius: 12px; display: grid; place-items: center; color: var(--color-coral); border: 1.5px dashed color-mix(in srgb, var(--color-coral) 55%, transparent); background: color-mix(in srgb, var(--color-coral) 10%, transparent); animation: drop-pulse 4.6s ease-in-out infinite; }
+@keyframes drop-pulse { 0%, 74%, 100% { transform: scale(1); box-shadow: 0 0 0 0 transparent; } 81% { transform: scale(1.14); box-shadow: 0 0 28px -6px var(--color-coral); } 88% { transform: scale(1); } }
+.delivered { position: absolute; right: 3%; bottom: 92px; font-size: 0.72rem; letter-spacing: 0.05em; color: var(--color-coral); opacity: 0; animation: delivered-flash 4.6s ease-in-out infinite; }
+@keyframes delivered-flash { 0%, 74%, 100% { opacity: 0; transform: translateY(6px); } 82% { opacity: 1; transform: translateY(0); } 92% { opacity: 0; } }
+.parcel { position: absolute; bottom: 44px; left: 0; width: 46px; height: 40px; border-radius: 6px; background: linear-gradient(160deg, #e8b878, #cd9150); box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.4), inset 0 -6px 10px rgba(0, 0, 0, 0.18), inset 0 6px 8px rgba(255, 255, 255, 0.28); animation: parcel-run 4.6s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.parcel::before { content: ""; position: absolute; top: 42%; left: 0; right: 0; height: 9px; background: color-mix(in srgb, var(--color-coral) 72%, #b9855a); }
+.parcel-tapev { position: absolute; top: 0; bottom: 0; left: 58%; width: 9px; background: color-mix(in srgb, var(--color-coral) 72%, #b9855a); }
+.parcel-label { position: absolute; top: 5px; left: 6px; width: 15px; height: 11px; border-radius: 2px; background: #fff; opacity: 0.92; }
+.parcel-check { position: absolute; inset: 0; display: grid; place-items: center; font-size: 20px; font-weight: 800; color: #fff; opacity: 0; animation: parcel-check 4.6s ease-in-out infinite; }
+.parcel-2 { animation-delay: -2.3s; }
+.parcel-2 .parcel-check { animation-delay: -2.3s; }
+@keyframes parcel-run {
+  0% { left: -14%; opacity: 0; transform: translateY(0) rotate(-2deg) scale(0.7); }
+  8% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  22% { transform: translateY(-7px) rotate(2deg) scale(1); }
+  36% { transform: translateY(0) rotate(0deg) scale(1); }
+  52% { transform: translateY(-7px) rotate(-2deg) scale(1); }
+  66% { transform: translateY(0) rotate(0deg) scale(1); }
+  74% { left: 78%; opacity: 1; transform: translateY(-4px) rotate(2deg) scale(1); }
+  84% { left: 84%; opacity: 0; transform: translateY(16px) rotate(8deg) scale(0.55); }
+  100% { left: 84%; opacity: 0; }
+}
+@keyframes parcel-check { 0%, 56%, 100% { opacity: 0; } 64%, 74% { opacity: 1; } }
+
+/* ------------------------------------------------------------
+   Launch trajectory (Process) — rocket ascends into orbit
+   ------------------------------------------------------------ */
+.mission-map {
+  position: relative;
+  max-width: 60rem;
+  margin: 0 auto 2.25rem;
+}
+.traj-track { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 2; }
+.traj-flow {
+  fill: none;
+  stroke: url(#trajGrad);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 9 13;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--color-cyan) 55%, transparent));
+  animation: dashmove 0.9s linear infinite;
+}
+@keyframes dashmove { to { stroke-dashoffset: -22; } }
+.mnode-core { animation: twinkle 3s ease-in-out infinite; }
+.mnode-ring { transform-box: fill-box; transform-origin: center; animation: mpulse 3s ease-out infinite; }
+@keyframes mpulse { 0% { transform: scale(0.55); opacity: 0.7; } 70%, 100% { transform: scale(2.4); opacity: 0; } }
+.rocket-flame { transform-box: fill-box; transform-origin: right center; animation: flame 0.22s steps(2, jump-none) infinite; }
+@keyframes flame { 50% { opacity: 0.5; transform: scaleX(0.65); } }
 
 /* ------------------------------------------------------------
    Reduced motion — turn everything calm
